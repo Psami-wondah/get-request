@@ -1,7 +1,10 @@
 from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
-from typing import Any
 from pydantic import BaseModel
+import logging
+
+logger = logging.getLogger("uvicorn.access")
+logger.setLevel(logging.INFO)
 
 
 app = FastAPI(
@@ -27,10 +30,14 @@ async def get_request(body: BaseModel, request: Request):
     url = request.url
     query_params = request.query_params
 
-    return {
+    response =  {
         "body": req_body,
         "headers": headers,
         "url": url,
         "query_params": query_params._dict
     }
+
+    logger.info(response)
+    print(response)
+    return response
     
